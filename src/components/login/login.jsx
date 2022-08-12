@@ -4,7 +4,7 @@ import './login.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Login = ( { setLoginUser } ) => {
+const Login = ( { setToken } ) => {
     const navigate = useNavigate();
     const [user,setUser] = useState({
         email:"",
@@ -24,11 +24,17 @@ const Login = ( { setLoginUser } ) => {
         console.log('login clicked');
         try{
             const res = await axios.post("http://localhost:8000/login",user)
-            alert(res.data.message);
-            setLoginUser(()=>res.data.user);
-            console.log(res.data.token);
-            console.log(res.data.user);
-            navigate('/');
+            // setLoginUser(()=>res.data.user);
+            const token = res.data.token;
+            if(token){
+                alert(res.data.message);
+                localStorage.setItem('token',token);
+                setToken(token);
+                console.log(token);
+                navigate('/');
+            } else {
+                alert('Invalid credentials');
+            }
         }
         catch(err){
             console.log(err);
