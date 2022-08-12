@@ -12,7 +12,7 @@ router.post('/login',async (req,res)=>{
             name: user.name,
             email:user.email
         },'secret123')
-        res.send({message:'Login successfull',user:user,token:token})
+        res.send({message:'Login successfull', token:token})
     } else {
         res.send({message:'user doesnt exist'});
     }
