@@ -1,19 +1,25 @@
 import './App.css';
-import Login from './components/login/login';
-import Register from './components/register/register';
-import Homepage from './components/homepage/homepage';
 import { BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import Navbar from './components/navbar/navbar';
+import Login from './screens/login/login';
+import Register from './screens/register/register';
+import Homepage from './screens/homepage/homepage';
+import Dashboard from './screens/dashboard/dashboard';
+import CreateQuiz from './screens/createQuiz/createQuiz';
+import JoinQuiz from './screens/joinQuiz/joinQuiz';
 
 function App() {
   const[ user, setLoginUser] = useState({
+      id:"",
       name:"",
       email:"",
-      password:"" 
   })
-  const [token,setToken] = useState(null);
+  // const [token,setToken] = useState(null);
   useEffect(()=>{
     const token = localStorage.getItem('token');
     if(token){
@@ -21,25 +27,40 @@ function App() {
       const User = jwtDecode(token);
       if(!User){
         localStorage.removeItem('token');
-        setToken(null);
+        setLoginUser({});
+        // setToken(null);
       } else {
-        setToken(token);
+        setLoginUser({
+          id:User.iat,
+          name:User.name,
+          email:User.email
+        })
         console.log(User);
+        console.log(user);
       }
-      // setLoginUser(User);
     }
   },[]);
 
   return (
-    <div className="App">
+    <>
     <Router>
+    {
+      user? <Navbar user={user} setLoginUser={setLoginUser}/>:null
+    }
+    <div className="App">
       <Routes>
-        <Route exact path="/" element={ token ? <Homepage token={token} setToken={setToken}/>: <Login setToken={setToken}/>}/>
-        <Route exact path="/login" element={<Login setToken={setToken}/>}/>
-        <Route exact path="/register" element={<Register/>}/>
+        <Route exact path="/" element={ (user && user.id) ? <Homepage user={user} setLoginUser={setLoginUser}/>: <Login user={user} setLoginUser={setLoginUser}/>}/>
+        <Route path="/login" element={<Login user={user} setLoginUser={setLoginUser}/>}/>
+        <Route path="/register" element={<Register/>}/>
+        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/createquiz" element={<CreateQuiz/>}/>
+        <Route path="/joinquiz" element={<JoinQuiz
+
+        />}/>
       </Routes>
-    </Router>
     </div>
+    </Router>
+    </>
   );
 }
 export default App;

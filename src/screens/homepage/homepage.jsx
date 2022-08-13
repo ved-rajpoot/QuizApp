@@ -1,16 +1,16 @@
 import React from 'react'
 import './homepage.css'
-import jwtDecode from 'jwt-decode';
 
-const Homepage = ({ token , setToken}) => {
+const Homepage = ({ user , setLoginUser}) => {
 
-  const user = jwtDecode(token);
-  console.log(user);
+  // const user = jwtDecode(token);
+  // console.log(user);
 
   const logout = ()=>{
     localStorage.removeItem('token');
-    setToken(null);
-    console.log(token);
+    setLoginUser({});
+    // setToken(null);
+    // console.log(token);
   }
   return (
     <div className='homepage'>
