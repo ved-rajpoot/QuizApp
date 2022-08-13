@@ -5,8 +5,10 @@ const userSchema = new mongoose.Schema({
     name: String,
     email: String,
     password : String,
-    createdQuizzes: [quizSchema],
-    attemptedQuizzes: [quizSchema]
+    // createdQuizzes: [quizSchema],
+    createdQuizzes: [String],
+    attemptedQuizzes: [String]
+    // attemptedQuizzes: [quizSchema]
 })
 const User = new mongoose.model("user", userSchema);
 module.exports = User;
