@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const quizSchema = new mongoose.Schema({
     title: String,
+    createdby:String,
     isOpen: Boolean,
     questions:[{
         qid:String,
@@ -11,5 +12,5 @@ const quizSchema = new mongoose.Schema({
     }],
     responses:[]
 });
-const quiz = new mongoose.model("Quiz",quizSchema);
-module.exports = {quiz,quizSchema};
+const Quiz = new mongoose.model("Quiz",quizSchema);
+module.exports = {Quiz,quizSchema};
