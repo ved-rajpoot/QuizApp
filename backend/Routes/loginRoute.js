@@ -8,6 +8,7 @@ router.post('/login',async (req,res)=>{
     const user = await User.findOne({email: email,password:password});
 
     if(user){
+        console.log(user);
         const token = jwt.sign({
             name: user.name,
             email:user.email

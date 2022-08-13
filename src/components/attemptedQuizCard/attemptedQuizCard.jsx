@@ -1,8 +1,6 @@
 import React from 'react'
-import './createdQuizCard.css'
 
-const CreatedQuizCard = ({quizId,index}) => {
-  console.log('createdquizcard component is triggerred');
+const AttemptedQuizCard = () => {
   return (
     <div className='card'>
         <h1>Title</h1>
@@ -16,4 +14,4 @@ const CreatedQuizCard = ({quizId,index}) => {
   )
 }
 
-export default CreatedQuizCard;
+export default AttemptedQuizCard

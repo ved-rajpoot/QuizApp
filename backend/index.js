@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const loginRouter = require('./Routes/loginRoute');
 const registerRouter = require('./Routes/registerRoute');
+const getQuizzesRoute = require('./Routes/getQuizzesRoute');
 
 const app = express();
 app.use(express.json());
@@ -14,6 +15,7 @@ app.use(cors());
 // app.use('/register',registerRouter);
 app.use(loginRouter);
 app.use(registerRouter);
+app.use(getQuizzesRoute);
 
 mongoose.connect('mongodb://localhost:27017/myLoginRegisterDB', {
     useNewUrlParser:true,

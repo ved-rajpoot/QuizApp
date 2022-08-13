@@ -45,14 +45,14 @@ function App() {
     <>
     <Router>
     {
-      user? <Navbar user={user} setLoginUser={setLoginUser}/>:null
+      user && user.id? <Navbar user={user} setLoginUser={setLoginUser}/>:null
     }
     <div className="App">
       <Routes>
         <Route exact path="/" element={ (user && user.id) ? <Homepage user={user} setLoginUser={setLoginUser}/>: <Login user={user} setLoginUser={setLoginUser}/>}/>
         <Route path="/login" element={<Login user={user} setLoginUser={setLoginUser}/>}/>
         <Route path="/register" element={<Register/>}/>
-        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/dashboard" element={<Dashboard user={user} setLoginUser={setLoginUser}/>}/>
         <Route path="/createquiz" element={<CreateQuiz/>}/>
         <Route path="/joinquiz" element={<JoinQuiz
 
