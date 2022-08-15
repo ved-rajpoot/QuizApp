@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const quizSchema = new mongoose.Schema({
+    userId:String,
     title: String,
-    createdby:String,
     isOpen: Boolean,
     questions:[{
         qid:String,
