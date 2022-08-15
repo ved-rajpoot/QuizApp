@@ -6,8 +6,8 @@ const userSchema = new mongoose.Schema({
     email: String,
     password : String,
     // createdQuizzes: [quizSchema],
-    createdQuizzes: [String],
-    attemptedQuizzes: [String]
+    createdQuizzes: [mongoose.SchemaTypes.ObjectId],
+    attemptedQuizzes: [mongoose.SchemaTypes.ObjectId]
     // attemptedQuizzes: [quizSchema]
 })
 const User = new mongoose.model("user", userSchema);
