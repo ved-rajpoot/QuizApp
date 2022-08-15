@@ -13,7 +13,6 @@ router.post('/createquiz',(req,res)=>{
         isOpen:1,
         questions:questionArray
     })
-    // var quizId = null;
     quiz.save( async (err,obj)=>{
         if(err){
             res.send(err);
@@ -21,7 +20,7 @@ router.post('/createquiz',(req,res)=>{
         console.log('quiz created successfully');
         const userinDB = await User.findOne({_id:user.id});
         console.log(userinDB);
-        const newCreatedQuizzes = userinDB.createdQuizzes.map((quizObj,index)=>{return quizObj});
+        const newCreatedQuizzes = userinDB.createdQuizzes.map(quizObj=>quizObj);
         newCreatedQuizzes.push(obj._id);
         // console.log('newCreatedQuizzes: ' ,newCreatedQuizzes);
         await User.updateOne({_id:userinDB._id},{createdQuizzes:newCreatedQuizzes});
@@ -34,7 +33,7 @@ router.post('/createquiz',(req,res)=>{
 })
 
 router.get('/getquizzes', async (req,res)=>{
-    console.log('createdquiz route triggerred');
+    console.log('getquizzes route triggerred');
     console.log('request body at getquizzes: ',req.body);
 
     const {id,name,email} = req.body;
@@ -43,40 +42,21 @@ router.get('/getquizzes', async (req,res)=>{
     console.log('user: ',user);
 
     if(user) {
-        // const createdQuizzes = user.createdQuizzes;
-        // const attemptedQuizzes = user.attemptedQuizzes;
-        // const attemptedQuizzes = user.attemptedQuizzes.map(async (quizId,index)=>{
-            //     const quiz = await Quiz.findOne({_id:quizId});
-        //     return quiz;
-        // })
-
-        // ///     createdQuizArray.push(quiz);
-
-        // console.log('createdQuizArray: ',createdQuizArray);
-        // Quiz.findOne({_id:quizId},(err,res)=>{
-            //     createdQuizArray.push('x');
-            //     console.log('xyz');
-            // })
-            // })
-        
-        // const attemptedQuizArray = [];
-        // user.attemptedQuizzes.forEach( async (quizId,index)=>{
-        //     const quiz = await Quiz.findOne({_id:quizId});
-        //     // console.log(quiz);
-        //     attemptedQuizArray.push(quiz);
-        // })
         let createdQuizArray = [];
         user.createdQuizzes.map((quizId,index)=>{
-            Quiz.findOne({_id:quizId}).then((res)=>{
-                console.log(res);
-                createdQuizArray.push(res);
-            });
+            // Quiz.findOne({_id:quizId}).then((res)=>{
+            //     console.log(res);
+            //     createdQuizArray.push(res);
+            // });
             // console.log(quiz);
-            // return quiz;
+            const res = async ()=>{
+                const quiz = await Quiz.findOne({_id:id});
+                return quiz;
+            }
+            createdQuizArray.push(res);
         })
         console.log('createdQuizArray: ' ,createdQuizArray);
         // console.log('attemptedQuizArray: ' ,attemptedQuizArray);
-
         res.send(createdQuizArray);
         // res.send({createdQuizArray,attemptedQuizArray});
     } else {
