@@ -12,19 +12,17 @@ const CreateQuiz = ({ user }) => {
   const [quizCode,setQuizcode] = useState('');
   // const [questionArray,setQuestionArray] = useState([]);
 
-  const createQuiz = ()=>{
+  const createQuiz = async ()=>{
     console.log(user);
     const quiz = {user,title,questionArray};
-    axios.post('http://localhost:8000/createquiz',quiz)
-    .then((res)=>{
-      setQuizcode(res.data.quizId);
-      console.log('quizId: ',res.data.quizId);
-      navigate(`/created-successfully/${quizCode}`);
-    })
-    .catch(err=>console.log(err));
-    // console.log('quizcode: ',quizcode);
+    const res = await axios.post('http://localhost:8000/createquiz',quiz)
+    console.log('quizId: ',res.data.quizId);
+    // setQuizcode(res.data.quizId);
+    setQuizcode('abcd');
+    console.log('quizcode: ',quizCode);
+    console.log(`/created-successfully/${quizCode}`,quizCode);
+    navigate(`/created-successfully/${quizCode}`);
   }
-
   return (
     <div>
       <input type="text" name="title"/>
