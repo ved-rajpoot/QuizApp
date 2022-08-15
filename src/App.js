@@ -12,6 +12,7 @@ import Dashboard from './screens/dashboard/dashboard';
 import CreateQuiz from './screens/createQuiz/createQuiz';
 import JoinQuiz from './screens/joinQuiz/joinQuiz';
 import CreatedSuccessfully from './screens/created-successfully/created-successfully';
+import AttemptQuiz from './screens/attempt-quiz/attempt-quiz';
 
 function App() {
   const[ user, setLoginUser] = useState({
@@ -53,8 +54,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard user={user} setLoginUser={setLoginUser}/>}/>
         <Route path="/createquiz" element={<CreateQuiz user={user}/>}/>
         <Route path="/created-successfully/:quizcode" element={<CreatedSuccessfully/>}/>
-        <Route path="/joinquiz" element={<JoinQuiz
-        />}/>
+        <Route path="/joinquiz" element={<JoinQuiz/>}/>
+        <Route path="/attempt-quiz/:quizcode" element={<AttemptQuiz/>}/>
       </Routes>
     </div>
     </Router>
