@@ -18,8 +18,8 @@ const Login = ( { user, setLoginUser } ) => {
     };
 
     useEffect(()=>{
-        console.log(user);
-    },[user]);
+        console.log(tempUser);
+    },[tempUser]);
 
     const login = async ()=>{
         console.log('login clicked');
@@ -30,15 +30,14 @@ const Login = ( { user, setLoginUser } ) => {
             if(token){
                 alert('Login successfull');
                 localStorage.setItem('token',token);
-                // setToken(token);
                 const User = jwtDecode(token);
                 setLoginUser({
-                   id:User.iat,
+                   id:User.id,
                    name:User.name,
                    email:User.email 
                 });
-                console.log(User);
-                console.log(token);
+                console.log('token: ',token);
+                // console.log(user);
                 navigate('/');
             } else {
                 alert('Invalid credentials');
