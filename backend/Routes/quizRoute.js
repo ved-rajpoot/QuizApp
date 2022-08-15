@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const User = require('../Models/userModel');
 const Quiz = require('../Models/quizModel').Quiz;
+const mongoose = require('mongoose');
 
 router.post('/createquiz',(req,res)=>{
     console.log('create quiz route triggerred');
@@ -64,4 +65,24 @@ router.get('/getquizzes', async (req,res)=>{
     }
 })
 
+router.get('/joinquiz', async (req,res)=>{
+    // res.send('hello');
+    console.log('request body: ', req.body);
+    try {
+        // const quizId = mongoose.Types.ObjectId(req.body.id);
+        const quizId = req.body;
+        // const quizData = await Quiz.findById(quizId);
+
+        console.log('quizId: ', quizId);
+        // console.log('quizDatafromDB: ', quizData);
+        
+        // if(quizData) {
+        //     res.send({message:"quiz found", quizData:quizData});
+        // } else {
+        //     res.send({message:"quiz not found wrond code"});
+        // }
+    } catch (err) {
+        res.send({message:"quiz not found", error:err});
+    }
+})
 module.exports = router;
