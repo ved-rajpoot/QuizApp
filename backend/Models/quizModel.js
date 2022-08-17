@@ -5,8 +5,7 @@ const quizSchema = new mongoose.Schema({
     title: String,
     isOpen: Boolean,
     questions:[{
-        qid:String,
-        question:String,
+        title:String,
         answers:[String],
         correctIndex:Number    
     }],

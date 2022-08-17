@@ -33,7 +33,7 @@ router.post('/createquiz',(req,res)=>{
     });
 })
 
-router.get('/getquizzes', async (req,res)=>{
+router.post('/getquizzes', async (req,res)=>{
     console.log('getquizzes route triggerred');
     console.log('request body at getquizzes: ',req.body);
 
@@ -43,46 +43,72 @@ router.get('/getquizzes', async (req,res)=>{
     console.log('user: ',user);
 
     if(user) {
-        let createdQuizArray = [];
+        const createdQuizArray = [];
+        createdQuizArray.push('xyz');
+        // bug: this map is not pushing anything into array.
         user.createdQuizzes.map((quizId,index)=>{
-            // Quiz.findOne({_id:quizId}).then((res)=>{
-            //     console.log(res);
-            //     createdQuizArray.push(res);
-            // });
-            // console.log(quiz);
-            const res = async ()=>{
-                const quiz = await Quiz.findOne({_id:id});
-                return quiz;
-            }
-            createdQuizArray.push(res);
+            Quiz.findOne({_id:quizId})
+            .then((quiz)=>{
+                // console.log('res: ', res);
+                console.log(index);
+                createdQuizArray.push('x');
+                console.log('createdQuizArray: ',createdQuizArray)
+            })
         })
         console.log('createdQuizArray: ' ,createdQuizArray);
+        res.send({message:"created quizzes found successfully",createdQuizArray});
+
         // console.log('attemptedQuizArray: ' ,attemptedQuizArray);
-        res.send(createdQuizArray);
         // res.send({createdQuizArray,attemptedQuizArray});
     } else {
         res.send({message:"User not found"});
     }
 })
 
-router.get('/joinquiz', async (req,res)=>{
-    // res.send('hello');
+router.post('/joinquiz', async (req,res)=>{
     console.log('request body: ', req.body);
     try {
-        // const quizId = mongoose.Types.ObjectId(req.body.id);
-        const quizId = req.body;
-        // const quizData = await Quiz.findById(quizId);
+        // const quizId = req.body.id;
+        const quizId = mongoose.Types.ObjectId(req.body.id);
+        const quizData = await Quiz.findById(quizId);
 
         console.log('quizId: ', quizId);
-        // console.log('quizDatafromDB: ', quizData);
+        console.log('quizDatafromDB: ', quizData);
         
-        // if(quizData) {
-        //     res.send({message:"quiz found", quizData:quizData});
-        // } else {
-        //     res.send({message:"quiz not found wrond code"});
-        // }
+        if(quizData) {
+            res.send({message:"quiz found", quizData:quizData});
+        } else {
+            res.send({message:"Incorrect quiz code"});
+        }
     } catch (err) {
-        res.send({message:"quiz not found", error:err});
+        res.send({message:"Incorrect quiz code", error:err});
     }
 })
+
+router.post('/submitquiz',async (req,res)=>{
+    console.log('submit quiz route triggered');
+    const {userId, quizId, attemptedQuestions} = req.body;
+    const quiz = await Quiz.findOne({_id:quizId});
+    const user = await User.findOne({_id:userId});
+    const temp = user.attemptedQuizzes;
+    temp.push(quizId);
+    await User.updateOne({_id:userId},{$set:{attemptedQuizzes:temp}});
+    
+    const questionArray = quiz.questions;
+    let score = 0;
+    for(let i=0;i<questionArray.length;i++)
+    {
+        if(questionArray[i].correctIndex===attemptedQuestions[i].selectedOption){
+            score++;
+        }
+    }
+    console.log(questionArray);
+    // console.log('userId: ',userId,', quizId: ',quizId);
+    // console.log('user: ',user,'\n quiz: ',quiz);
+    // console.log(questionArray,attemptedQuestions);
+    User.remove({});
+    Quiz.remove({});
+    res.send({score:score});
+})
+
 module.exports = router;
