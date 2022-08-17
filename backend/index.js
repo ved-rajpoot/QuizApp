@@ -15,7 +15,7 @@ app.use(cors());
 app.use(userRouter);
 app.use(quizRouter);
 
-mongoose.connect('mongodb://localhost:27017/myLoginRegisterDB', {
+mongoose.connect('mongodb://localhost:27017/QuizAppDB', {
     useNewUrlParser:true,
     useUnifiedTopology:true
 }, ()=>{console.log("DB connected")});
