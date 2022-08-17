@@ -13,6 +13,7 @@ import CreateQuiz from './screens/createQuiz/createQuiz';
 import JoinQuiz from './screens/joinQuiz/joinQuiz';
 import CreatedSuccessfully from './screens/created-successfully/created-successfully';
 import AttemptQuiz from './screens/attempt-quiz/attempt-quiz';
+import LoadingScreen from './screens/loadingScreen/loadingScreen';
 
 function App() {
   const[ user, setLoginUser] = useState({
@@ -23,7 +24,7 @@ function App() {
   useEffect(()=>{
     const token = localStorage.getItem('token');
     if(token){
-      console.log(token);
+      console.log('jwt token: ' , token);
       const User = jwtDecode(token);
       if(!User){
         localStorage.removeItem('token');
@@ -34,8 +35,8 @@ function App() {
           name:User.name,
           email:User.email
         })
-        console.log(User);
-        console.log(user);
+        console.log('User from jwt: ',User);
+        console.log('user of useState', user);
       }
     }
   },[]);
@@ -56,6 +57,7 @@ function App() {
         <Route path="/created-successfully/:quizcode" element={<CreatedSuccessfully/>}/>
         <Route path="/joinquiz" element={<JoinQuiz/>}/>
         <Route path="/attempt-quiz/:quizcode" element={<AttemptQuiz/>}/>
+        {/* <Route path="/loading" element={<LoadingScreen/>}/> */}
       </Routes>
     </div>
     </Router>
