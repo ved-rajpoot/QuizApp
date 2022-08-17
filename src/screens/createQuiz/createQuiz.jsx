@@ -8,8 +8,30 @@ const CreateQuiz = ({ user }) => {
   const navigate = useNavigate();
 
   const [title,setTitle] = useState('');
-  const [questionArray,setQuestionArray] = useState([{question:"what is your name",qid:1},{question:"how are you,qid:2"},{question:"hello dude",qid:3}]);
-  const [quizCode,setQuizcode] = useState('');
+  const [questionArray,setQuestionArray] = useState([
+    {
+      title:"what is your name ?",
+      answers:["hii","hello","ha haa haa","hiss huss"],
+      correctIndex:1    
+    },{
+        title:"How are you ?",
+        answers:["hii","hello","ha haa haa","hiss huss"],
+        correctIndex:2    
+    },{
+        title:"what is your name ?",
+        answers:["hii","hello","ha haa haa","hiss huss"],
+        correctIndex:3    
+    },{
+        title:"hee huu hii hajsk ?",
+        answers:["hii","hello","ha haa haa","hiss huss"],
+        correctIndex:4   
+    },{
+        title:"halo hii how vkdj ?",
+        answers:["hii","hello","ha haa haa","hiss huss"],
+        correctIndex:1    
+    },
+  ]);
+  const [quizCode,setQuizcode] = useState(null);
   // const [questionArray,setQuestionArray] = useState([]);
 
   const createQuiz = async ()=>{
@@ -20,16 +42,22 @@ const CreateQuiz = ({ user }) => {
     console.log('questionArray: ',questionArray);
     const res = await axios.post('http://localhost:8000/createquiz',quiz)
     console.log('quizId: ',res.data.quizId);
-    // setQuizcode(res.data.quizId);
-    setQuizcode('abcd');
+    setQuizcode(res.data.quizId);
     console.log('quizcode: ',quizCode);
+    // bug: not setting quizCode, its always null
     console.log(`/created-successfully/${quizCode}`,quizCode);
-    navigate(`/created-successfully/${quizCode}`);
+    
   }
 
-  // useEffect(()=>{
-  //   console.log(title);
-  // },[title]);
+  useEffect(()=>{
+    console.log('quizCode: ', quizCode);
+    if(quizCode!=null) {
+      navigate(`/created-successfully/${quizCode}`);
+    }
+  },[quizCode]);
+  useEffect(()=>{
+    console.log('page refreshed');
+  },[])
 
   return (
     <div>
@@ -39,7 +67,7 @@ const CreateQuiz = ({ user }) => {
       <ul>
         {
           questionArray.map((qus,index)=>{
-            return <li>{qus.question}</li>
+            return <li key={index}>{qus.title}</li>
           })
         }
       </ul>
