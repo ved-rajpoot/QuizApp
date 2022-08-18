@@ -44,10 +44,12 @@ router.post('/getquizzes', async (req,res)=>{
 
     if(user) {
         const createdQuizArray = [];
+        const attemptedQuizArray = [];
         createdQuizArray.push('xyz');
+        attemptedQuizArray.push('xyz');
         // bug: this map is not pushing anything into array.
-        user.createdQuizzes.map((quizId,index)=>{
-            Quiz.findOne({_id:quizId})
+        user.createdQuizzes.map(async (quizId,index)=>{
+           await Quiz.findOne({_id:quizId})
             .then((quiz)=>{
                 // console.log('res: ', res);
                 console.log(index);
@@ -56,7 +58,7 @@ router.post('/getquizzes', async (req,res)=>{
             })
         })
         console.log('createdQuizArray: ' ,createdQuizArray);
-        res.send({message:"created quizzes found successfully",createdQuizArray});
+        res.send({message:"created quizzes found successfully",createdQuizArray,attemptedQuizArray});
 
         // console.log('attemptedQuizArray: ' ,attemptedQuizArray);
         // res.send({createdQuizArray,attemptedQuizArray});
