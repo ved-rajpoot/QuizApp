@@ -3,21 +3,23 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import LoadingScreen from '../loadingScreen/loadingScreen';
+import { useNavigate } from 'react-router-dom';
+import Result from '../../components/result/result';
 
 const AttemptQuiz = () => {
+    const navigate = useNavigate();
     const { quizcode } = useParams();
-    const [quizData, setQuizData] = useState({});
+    const [quizData, setQuizData] = useState(null);
     const [attemptedQuestions, setattemptedQuestions] = useState([]);
     const [loading,setLoading] = useState(true);
-    const [result,setResult] = useState();
+    const [score,setScore] = useState();
 
     const fetchQuizData = async ()=>{
         console.log('quizcode from params: ',quizcode);
         const req = {id:quizcode};
         const res = await axios.post('http://localhost:8000/joinquiz',req);
         console.log('response of get joinquiz ', res.data.quizData);
-        setQuizData(res.data.quizData);
-        
+        setQuizData(res.data.quizData);   
     }
     useEffect(()=>{
         try{
@@ -29,12 +31,13 @@ const AttemptQuiz = () => {
                     selectedOption:0
                 }
             })
-            // setattemptedQuestions(temp);
-            // console.log('temp: ', temp);
+            setattemptedQuestions(temp);
+            console.log('temp: ', temp);
             console.log('attemptedQuestions: ',attemptedQuestions);
         } catch (err) {
             console.log(err);
         }
+        if(quizData!=null) setLoading(false);
     },[quizData]);
 
     useEffect(()=>{
@@ -43,7 +46,6 @@ const AttemptQuiz = () => {
 
     useEffect(()=>{
         fetchQuizData();
-        setLoading(false);
     },[])
 
     const submitQuiz = async ()=>{
@@ -51,6 +53,7 @@ const AttemptQuiz = () => {
         const quizId = quizcode;
         const res = await axios.post('http://localhost:8000/submitquiz',{userId:User.id,quizId,attemptedQuestions});
         console.log(res);
+        setScore(res.data.score);
     }
     const handleOptionSelect = (e,qusIndex,optionIndex)=>{
         const selectedOption = optionIndex + 1;
@@ -61,6 +64,7 @@ const AttemptQuiz = () => {
         console.log('selectedOption: ', selectedOption);
         console.log('attemptedQuestions: ', attemptedQuestions);
     }
+    if(score!=null) return <Result score={score}/>
     return (
       loading?<LoadingScreen/>:  
       <div>
