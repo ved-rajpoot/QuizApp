@@ -4,10 +4,12 @@ import CreatedQuizCard from '../../components/createdQuizCard/createdQuizCard';
 import axios from 'axios';
 import AttemptedQuizCard from '../../components/attemptedQuizCard/attemptedQuizCard';
 import jwtDecode from 'jwt-decode';
+import LoadingScreen from '../loadingScreen/loadingScreen';
 
 const Dashboard = ({user,setLoginUser}) => {
   const [createdQuizzes,setCreatedQuizzes] = useState([]);
   const [attemptedQuizzes,setAttemptedQuizzes] = useState([]);
+  const [loading,setLoading] = useState(true);
 
   useEffect( ()=>{
       const token = localStorage.getItem('token');
@@ -24,22 +26,24 @@ const Dashboard = ({user,setLoginUser}) => {
     // setCreatedQuizzes(['lka','kal','lakj','kalsj']);
     // setAttemptedQuizzes(['lka','kal','lakj','kalsj']);
     // console.log(createdQuizzes);
+    setLoading(false);
   },[])
   return (
+    loading || attemptedQuizzes.length===0 || createdQuizzes.length===0 ? <LoadingScreen/>:
     <div>
         <h1>Created Quizzes</h1>
-        {/* { <ul>{
+        { <ul>{
           createdQuizzes.map((quiz,index)=>{
             return <li key={index}><CreatedQuizCard quiz={quiz}/></li>
           })
         }
-        </ul> } */}
+        </ul> }
         <h1>Attempted Quizzes</h1>
-        {/* { <ul>{
+        { <ul>{
           attemptedQuizzes.map((quiz,index)=>{
             return <li key={index}><AttemptedQuizCard quizId={quiz}/></li>
           })
-        }</ul> } */}
+        }</ul> }
     </div>
   )
 }
